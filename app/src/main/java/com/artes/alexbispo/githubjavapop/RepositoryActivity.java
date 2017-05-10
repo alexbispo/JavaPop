@@ -7,11 +7,20 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import com.artes.alexbispo.githubjavapop.model.Owner;
 import com.artes.alexbispo.githubjavapop.model.Repository;
+import com.artes.alexbispo.githubjavapop.web.GitHubInterface;
+import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
+import com.artes.alexbispo.githubjavapop.web.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RepositoryActivity extends AppCompatActivity {
 
@@ -49,26 +58,40 @@ public class RepositoryActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            getAllRepositories(mRepositoryList);
+            // TODO Tratar timeout da requisição, por falta de internet por exemplo.
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            getAllRepositories(mRepositoryList);
+            httpGetRepositories();
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Object o) {
-            dialog.dismiss();
-            mRepositoryAdapter.notifyDataSetChanged();
+        private void httpGetRepositories() {
+            GitHubInterface ghInterface = WebClient.getClient().create(GitHubInterface.class);
+            Call<GitHubResponse> call = ghInterface.getJavaPopRepositories();
+            call.enqueue(new Callback<GitHubResponse>() {
+                @Override
+                public void onResponse(Call<GitHubResponse> call, Response<GitHubResponse> response) {
+                    if(response.isSuccessful()){
+                        setRepositories(response.body().getItems());
+                        dialog.dismiss();
+                        mRepositoryAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GitHubResponse> call, Throwable t) {
+                    Log.e("HTTP", "", t);
+                }
+            });
         }
 
-        private List<Repository> getAllRepositories(List<Repository> repositoryList) {
-            for(int i=0; i < 20; i++){
-                repositoryList.add(new Repository("Repository " + i, "Repository " + i + "description", "user " + i, 562, 65));
-            }
-            return repositoryList;
+        private void setRepositories(List<Repository> repositoryList) {
+            // TODO Verificar se não temos um problema com muito objetos em memória.
+            mRepositoryList.addAll(repositoryList);
         }
     }
 

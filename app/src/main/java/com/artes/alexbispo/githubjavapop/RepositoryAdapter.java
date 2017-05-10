@@ -48,8 +48,18 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     public void onBindViewHolder(RepositoryViewHolder holder, int position) {
         Repository repository = repositoryList.get(position);
         holder.mRepositoryName.setText(repository.getName());
-        holder.mRepositoryDescription.setText(repository.getDescription());
-        holder.mRepositoryUserName.setText(repository.getUserName());
+
+        StringBuilder sb = new StringBuilder();
+        if(repository.getDescription().length() > 70){
+            sb.append(repository.getDescription().substring(0, 70));
+        } else {
+             sb.append(repository.getDescription());
+        }
+        sb.append("...");
+
+        holder.mRepositoryDescription.setText(sb.toString());
+
+        holder.mRepositoryUserName.setText(repository.getOwner().getLogin());
         holder.mRepositoryForks.setText(String.valueOf(repository.getForks()));
         holder.mRepositoryStars.setText(String.valueOf(repository.getStars()));
     }
