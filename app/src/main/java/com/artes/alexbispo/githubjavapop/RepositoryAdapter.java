@@ -8,9 +8,8 @@ import android.widget.TextView;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by alex on 10/05/17.
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.RepositoryViewHolder> {
 
-    private List<Repository> repositoryList;
+    private Set<Repository> mDataset;
 
     public class RepositoryViewHolder extends RecyclerView.ViewHolder {
         public TextView mRepositoryName, mRepositoryDescription, mRepositoryUserName, mRepositoryForks, mRepositoryStars;
@@ -33,8 +32,8 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
         }
     }
 
-    public RepositoryAdapter(List<Repository> repositoryList) {
-        this.repositoryList = repositoryList;
+    public RepositoryAdapter(Set<Repository> dataSet) {
+        this.mDataset = dataSet;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
 
     @Override
     public void onBindViewHolder(RepositoryViewHolder holder, int position) {
-        Repository repository = repositoryList.get(position);
+        Repository repository = (Repository) mDataset.toArray()[position];
         holder.mRepositoryName.setText(repository.getName());
 
         StringBuilder sb = new StringBuilder();
@@ -66,6 +65,6 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
 
     @Override
     public int getItemCount() {
-        return repositoryList.size();
+        return mDataset.size();
     }
 }

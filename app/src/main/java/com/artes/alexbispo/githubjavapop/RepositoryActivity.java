@@ -2,21 +2,20 @@ package com.artes.alexbispo.githubjavapop;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.artes.alexbispo.githubjavapop.model.Owner;
 import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.artes.alexbispo.githubjavapop.web.GitHubInterface;
 import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 import com.artes.alexbispo.githubjavapop.web.WebClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,7 +23,7 @@ import retrofit2.Response;
 
 public class RepositoryActivity extends AppCompatActivity {
 
-    private List<Repository> mRepositoryList = new ArrayList<>();
+    private Set<Repository> mRepositorySet = new TreeSet<>();
     private RepositoryAdapter mRepositoryAdapter;
 
     @Override
@@ -34,7 +33,7 @@ public class RepositoryActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_repositories);
 
-        mRepositoryAdapter = new RepositoryAdapter(mRepositoryList);
+        mRepositoryAdapter = new RepositoryAdapter(mRepositorySet);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -64,7 +63,7 @@ public class RepositoryActivity extends AppCompatActivity {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-//            getAllRepositories(mRepositoryList);
+//            getAllRepositories(mRepositorySet);
             httpGetRepositories();
             return null;
         }
@@ -89,9 +88,9 @@ public class RepositoryActivity extends AppCompatActivity {
             });
         }
 
-        private void setRepositories(List<Repository> repositoryList) {
+        private void setRepositories(Set<Repository> repositorySet) {
             // TODO Verificar se não temos um problema com muito objetos em memória.
-            mRepositoryList.addAll(repositoryList);
+            mRepositorySet.addAll(repositorySet);
         }
     }
 
