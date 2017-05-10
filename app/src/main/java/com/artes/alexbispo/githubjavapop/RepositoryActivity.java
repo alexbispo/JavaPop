@@ -89,7 +89,6 @@ public class RepositoryActivity extends AppCompatActivity {
         }
 
         private void setRepositories(Set<Repository> repositorySet) {
-            // TODO Verificar se não temos um problema com muito objetos em memória.
             mRepositorySet.addAll(repositorySet);
         }
     }
