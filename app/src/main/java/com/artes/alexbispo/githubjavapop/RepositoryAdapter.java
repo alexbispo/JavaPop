@@ -4,9 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Set;
@@ -21,6 +23,7 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
 
     public class RepositoryViewHolder extends RecyclerView.ViewHolder {
         public TextView mRepositoryName, mRepositoryDescription, mRepositoryUserName, mRepositoryForks, mRepositoryStars;
+        public ImageView mRepositoryOwner;
 
         public RepositoryViewHolder(View itemView) {
             super(itemView);
@@ -29,6 +32,7 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
             mRepositoryUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
             mRepositoryForks = (TextView) itemView.findViewById(R.id.tv_forks);
             mRepositoryStars = (TextView) itemView.findViewById(R.id.tv_stars);
+            mRepositoryOwner = (ImageView) itemView.findViewById(R.id.iv_owner);
         }
     }
 
@@ -47,6 +51,11 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     public void onBindViewHolder(RepositoryViewHolder holder, int position) {
         Repository repository = (Repository) mDataset.toArray()[position];
         holder.mRepositoryName.setText(repository.getName());
+        // TODO carregar em uma async task
+        Picasso.with(holder.mRepositoryOwner.getContext())
+                .load(repository.getOwner().getAvatarUrl())
+                .resize(32, 32)
+                .into(holder.mRepositoryOwner);
 
         StringBuilder sb = new StringBuilder();
         if(repository.getDescription().length() > 70){
