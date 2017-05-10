@@ -12,6 +12,12 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        android:layout_alignParentTop="true"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,12 +26,55 @@
         <TextView
             android:id="@+id/tv_repository_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/tv_repository_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_action_repo_forked"/>
+
+            <TextView
+                android:id="@+id/tv_forks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="640"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_action_star"/>
+
+            <TextView
+                android:id="@+id/tv_stars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="98"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent"/>
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -37,7 +86,9 @@
         <TextView
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_action_person"
+            android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 
 </RelativeLayout>
