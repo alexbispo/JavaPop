@@ -52,7 +52,6 @@
                 android:id="@+id/tv_forks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="640"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@color/colorAccent"/>
@@ -69,7 +68,6 @@
                 android:id="@+id/tv_stars"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="98"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@color/colorAccent"/>

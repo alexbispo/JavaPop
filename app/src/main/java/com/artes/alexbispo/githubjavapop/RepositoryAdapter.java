@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -19,13 +21,15 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     private List<Repository> repositoryList;
 
     public class RepositoryViewHolder extends RecyclerView.ViewHolder {
-        public TextView repositoryName, repositoryDescription, repositoryUserName;
+        public TextView mRepositoryName, mRepositoryDescription, mRepositoryUserName, mRepositoryForks, mRepositoryStars;
 
         public RepositoryViewHolder(View itemView) {
             super(itemView);
-            repositoryName = (TextView) itemView.findViewById(R.id.tv_repository_name);
-            repositoryDescription = (TextView) itemView.findViewById(R.id.tv_repository_description);
-            repositoryUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+            mRepositoryName = (TextView) itemView.findViewById(R.id.tv_repository_name);
+            mRepositoryDescription = (TextView) itemView.findViewById(R.id.tv_repository_description);
+            mRepositoryUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+            mRepositoryForks = (TextView) itemView.findViewById(R.id.tv_forks);
+            mRepositoryStars = (TextView) itemView.findViewById(R.id.tv_stars);
         }
     }
 
@@ -43,9 +47,11 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     @Override
     public void onBindViewHolder(RepositoryViewHolder holder, int position) {
         Repository repository = repositoryList.get(position);
-        holder.repositoryName.setText(repository.getName());
-        holder.repositoryDescription.setText(repository.getDescription());
-        holder.repositoryUserName.setText(repository.getUserName());
+        holder.mRepositoryName.setText(repository.getName());
+        holder.mRepositoryDescription.setText(repository.getDescription());
+        holder.mRepositoryUserName.setText(repository.getUserName());
+        holder.mRepositoryForks.setText(String.valueOf(repository.getForks()));
+        holder.mRepositoryStars.setText(String.valueOf(repository.getStars()));
     }
 
     @Override
