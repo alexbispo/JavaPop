@@ -1,6 +1,7 @@
 package com.artes.alexbispo.githubjavapop;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -102,7 +103,7 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
     }
 
     private RecyclerView.OnItemTouchListener getReCyclerViewOnItemTouchListener(){
-        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+        final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;
@@ -112,9 +113,11 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
             public void onLongPress(MotionEvent e) {
                 View child = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
                 if(child != null){
-//                    Object[] repositoryArray = mPullSet.toArray();
-//                    Repository repo = (Repository) repositoryArray[mRecyclerView.getChildAdapterPosition(child)];
-//                    goToPullActivity(repo);
+                    Object[] repositoryArray = mPullSet.toArray();
+                    Pull pull = (Pull) repositoryArray[mRecyclerView.getChildAdapterPosition(child)];
+                    Intent goToPullPage = new Intent(Intent.ACTION_VIEW);
+                    goToPullPage.setData(Uri.parse(pull.getUrl()));
+                    startActivity(goToPullPage);
                 }
             }
         });
@@ -124,10 +127,12 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
-                if(child != null){
-//                    Object[] repositoryArray = mPullSet.toArray();
-//                    Repository repo = (Repository) repositoryArray[rv.getChildAdapterPosition(child)];
-//                    goToPullActivity(repo);
+                if(child != null && gestureDetector.onTouchEvent(e)){
+                    Object[] repositoryArray = mPullSet.toArray();
+                    Pull pull = (Pull) repositoryArray[rv.getChildAdapterPosition(child)];
+                    Intent goToPullPage = new Intent(Intent.ACTION_VIEW);
+                    goToPullPage.setData(Uri.parse(pull.getUrl()));
+                    startActivity(goToPullPage);
                 }
                 return false;
             }

@@ -23,7 +23,7 @@ public class Pull {
     @SerializedName("body")
     private String body;
 
-    @SerializedName("url")
+    @SerializedName("html_url")
     private String url;
 
     @SerializedName("state")
