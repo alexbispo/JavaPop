@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,8 +20,8 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
 
     private Set<Repository> mRepositorySet = new TreeSet<>();
     private RepositoryAdapter mRepositoryAdapter;
-    private boolean loadRepositoriesTaskCompleted;
-    private int dataSetPage;
+    private boolean mLoadRepositoriesTaskCompleted;
+    private int mDataSetPage;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
 
@@ -45,15 +44,15 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
     @Override
     protected void onResume() {
         super.onResume();
-        dataSetPage++;
-        new LoadRepositoriesTask(this, this, dataSetPage).execute();
+        mDataSetPage++;
+        new LoadRepositoriesTask(this, this, mDataSetPage).execute();
     }
 
     @Override
     public void onLoadRepositoriesTaskCompleted(Set<Repository> repositorySet) {
         mRepositorySet.addAll(repositorySet);
         mRepositoryAdapter.notifyDataSetChanged();
-        loadRepositoriesTaskCompleted = true;
+        mLoadRepositoriesTaskCompleted = true;
     }
 
     private RecyclerView.OnScrollListener getOnScrollListener() {
@@ -62,21 +61,13 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 boolean isScrollDown = dy > 0;
                 if(isScrollDown){
-                    if(loadRepositoriesTaskCompleted){
-                        int itemsVisibleCount = mLayoutManager.getChildCount();
+                    if(mLoadRepositoriesTaskCompleted){
                         int itemCount = mLayoutManager.getItemCount();
 
-                        Log.d("VISIBLE", "findFirstCompletelyVisibleItemPosition " + mLayoutManager.findFirstCompletelyVisibleItemPosition());
-                        Log.d("VISIBLE", "findFirstVisibleItemPosition " + mLayoutManager.findFirstVisibleItemPosition());
-                        Log.d("VISIBLE", "findLastCompletelyVisibleItemPosition " + mLayoutManager.findLastCompletelyVisibleItemPosition());
-                        Log.d("VISIBLE", "findLastVisibleItemPosition " + mLayoutManager.findLastVisibleItemPosition());
-
-                        Log.d("SCROLL", "itemCount: " + itemCount + "; childCount: " + itemsVisibleCount +  "; dx: " + dx + "; dy: " + dy);
-
                         if((mLayoutManager.findLastVisibleItemPosition() + 1) == itemCount){
-                            dataSetPage++;
-                            loadRepositoriesTaskCompleted = false;
-                            new LoadRepositoriesTask(RepositoryActivity.this, RepositoryActivity.this, dataSetPage).execute();
+                            mDataSetPage++;
+                            mLoadRepositoriesTaskCompleted = false;
+                            new LoadRepositoriesTask(RepositoryActivity.this, RepositoryActivity.this, mDataSetPage).execute();
                         }
 
                     }
@@ -121,9 +112,6 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
-
-
-
         };
     }
 
