@@ -50,7 +50,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
         loadRepositoriesTaskCompleted = true;
     }
 
-    public RecyclerView.OnScrollListener getOnScrollListener() {
+    private RecyclerView.OnScrollListener getOnScrollListener() {
         return new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
