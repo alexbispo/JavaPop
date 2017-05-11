@@ -47,7 +47,7 @@ public class Repository implements Comparable<Repository> {
     }
 
     public String getName() {
-        return name;
+        return name != null ? name : "";
     }
 
     public void setName(String name) {
@@ -55,7 +55,7 @@ public class Repository implements Comparable<Repository> {
     }
 
     public String getDescription() {
-        return description;
+        return description != null ? description : "";
     }
 
     public void setDescription(String description) {

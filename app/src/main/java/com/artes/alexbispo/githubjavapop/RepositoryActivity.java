@@ -1,7 +1,5 @@
 package com.artes.alexbispo.githubjavapop;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,21 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
-import com.artes.alexbispo.githubjavapop.web.GitHubInterface;
-import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
-import com.artes.alexbispo.githubjavapop.web.WebClient;
+import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
 
 import java.util.Set;
 import java.util.TreeSet;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class RepositoryActivity extends AppCompatActivity {
+public class RepositoryActivity extends AppCompatActivity implements LoadRepositoriesTask.Listener {
 
     private Set<Repository> mRepositorySet = new TreeSet<>();
     private RepositoryAdapter mRepositoryAdapter;
+    private boolean loadRepositoriesTaskCompleted;
+    private int dataSetPage;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,64 +29,53 @@ public class RepositoryActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_repositories);
 
         mRepositoryAdapter = new RepositoryAdapter(mRepositorySet);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
+        mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mRepositoryAdapter);
+        recyclerView.addOnScrollListener(getOnScrollListener());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        new LoadRepositoriesTask().execute();
+        dataSetPage++;
+        new LoadRepositoriesTask(this, this, dataSetPage).execute();
     }
 
-    private class LoadRepositoriesTask extends AsyncTask {
+    @Override
+    public void onLoadRepositoriesTaskCompleted(Set<Repository> repositorySet) {
+        mRepositorySet.addAll(repositorySet);
+        mRepositoryAdapter.notifyDataSetChanged();
+        loadRepositoriesTaskCompleted = true;
+    }
 
-        private ProgressDialog dialog;
+    public RecyclerView.OnScrollListener getOnScrollListener() {
+        return new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                boolean isScrollDown = dy > 0;
+                if(isScrollDown){
+                    if(loadRepositoriesTaskCompleted){
+                        int itemsVisibleCount = mLayoutManager.getChildCount();
+                        int itemCount = mLayoutManager.getItemCount();
 
-        @Override
-        protected void onPreExecute() {
-            dialog = ProgressDialog.show(RepositoryActivity.this, "Por favor aguarde", "Buscando repositórios...", true, true);
-        }
+                        Log.d("VISIBLE", "findFirstCompletelyVisibleItemPosition " + mLayoutManager.findFirstCompletelyVisibleItemPosition());
+                        Log.d("VISIBLE", "findFirstVisibleItemPosition " + mLayoutManager.findFirstVisibleItemPosition());
+                        Log.d("VISIBLE", "findLastCompletelyVisibleItemPosition " + mLayoutManager.findLastCompletelyVisibleItemPosition());
+                        Log.d("VISIBLE", "findLastVisibleItemPosition " + mLayoutManager.findLastVisibleItemPosition());
 
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            // TODO Tratar timeout da requisição, por falta de internet por exemplo.
-//            try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            getAllRepositories(mRepositorySet);
-            httpGetRepositories();
-            return null;
-        }
+                        Log.d("SCROLL", "itemCount: " + itemCount + "; childCount: " + itemsVisibleCount +  "; dx: " + dx + "; dy: " + dy);
 
-        private void httpGetRepositories() {
-            GitHubInterface ghInterface = WebClient.getClient().create(GitHubInterface.class);
-            Call<GitHubResponse> call = ghInterface.getJavaPopRepositories();
-            call.enqueue(new Callback<GitHubResponse>() {
-                @Override
-                public void onResponse(Call<GitHubResponse> call, Response<GitHubResponse> response) {
-                    if(response.isSuccessful()){
-                        setRepositories(response.body().getItems());
-                        dialog.dismiss();
-                        mRepositoryAdapter.notifyDataSetChanged();
+                        if((mLayoutManager.findLastVisibleItemPosition() + 1) == itemCount){
+                            dataSetPage++;
+                            loadRepositoriesTaskCompleted = false;
+                            new LoadRepositoriesTask(RepositoryActivity.this, RepositoryActivity.this, dataSetPage).execute();
+                        }
+
                     }
                 }
-
-                @Override
-                public void onFailure(Call<GitHubResponse> call, Throwable t) {
-                    Log.e("HTTP", "", t);
-                }
-            });
-        }
-
-        private void setRepositories(Set<Repository> repositorySet) {
-            mRepositorySet.addAll(repositorySet);
-        }
+            }
+        };
     }
-
-
 }

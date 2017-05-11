@@ -1,6 +1,7 @@
 package com.artes.alexbispo.githubjavapop;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,26 +51,29 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     @Override
     public void onBindViewHolder(RepositoryViewHolder holder, int position) {
         Repository repository = (Repository) mDataset.toArray()[position];
-        holder.mRepositoryName.setText(repository.getName());
-        // TODO carregar em uma async task
-        Picasso.with(holder.mRepositoryOwner.getContext())
-                .load(repository.getOwner().getAvatarUrl())
-                .resize(32, 32)
-                .into(holder.mRepositoryOwner);
 
-        StringBuilder sb = new StringBuilder();
-        if(repository.getDescription().length() > 70){
-            sb.append(repository.getDescription().substring(0, 70));
-        } else {
-             sb.append(repository.getDescription());
+        if(repository != null){
+            holder.mRepositoryName.setText(repository.getName());
+            // TODO carregar em uma async task
+            Picasso.with(holder.mRepositoryOwner.getContext())
+                    .load(repository.getOwner().getAvatarUrl())
+                    .resize(32, 32)
+                    .into(holder.mRepositoryOwner);
+
+            StringBuilder sb = new StringBuilder();
+            if(repository.getDescription().length() > 70){
+                sb.append(repository.getDescription().substring(0, 70));
+            } else {
+                sb.append(repository.getDescription());
+            }
+            sb.append("...");
+
+            holder.mRepositoryDescription.setText(sb.toString());
+
+            holder.mRepositoryUserName.setText(repository.getOwner().getLogin());
+            holder.mRepositoryForks.setText(String.valueOf(repository.getForks()));
+            holder.mRepositoryStars.setText(String.valueOf(repository.getStars()));
         }
-        sb.append("...");
-
-        holder.mRepositoryDescription.setText(sb.toString());
-
-        holder.mRepositoryUserName.setText(repository.getOwner().getLogin());
-        holder.mRepositoryForks.setText(String.valueOf(repository.getForks()));
-        holder.mRepositoryStars.setText(String.valueOf(repository.getStars()));
     }
 
     @Override
