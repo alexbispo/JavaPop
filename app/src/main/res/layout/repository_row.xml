@@ -24,17 +24,17 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:id="@+id/tv_repository_name"
+            android:id="@+id/tv_repo_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"/>
 
         <TextView
-            android:id="@+id/tv_repository_description"
+            android:id="@+id/tv_repo_description"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content" />
 
         <LinearLayout
@@ -51,7 +51,7 @@
                 android:src="@drawable/ic_action_repo_forked"/>
 
             <TextView
-                android:id="@+id/tv_forks"
+                android:id="@+id/tv_repo_forks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -67,7 +67,7 @@
                 android:src="@drawable/ic_action_star"/>
 
             <TextView
-                android:id="@+id/tv_stars"
+                android:id="@+id/tv_repo_stars"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -85,7 +85,7 @@
         android:layout_marginTop="20dp">
 
         <ImageView
-            android:id="@+id/iv_owner"
+            android:id="@+id/iv_repo_owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_person"
@@ -94,7 +94,7 @@
             android:layout_marginBottom="20dp"/>
 
         <TextView
-            android:id="@+id/tv_user_name"
+            android:id="@+id/tv_repo_owner_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

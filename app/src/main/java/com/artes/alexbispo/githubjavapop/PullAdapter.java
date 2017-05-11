@@ -28,7 +28,7 @@ public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder
             super(itemView);
             mPullTitle = (TextView) itemView.findViewById(R.id.tv_pull_title);
             mPullBody = (TextView) itemView.findViewById(R.id.tv_pull_body);
-            mPullUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
+            mPullUserName = (TextView) itemView.findViewById(R.id.tv_repo_owner_name);
             mPullUser = (ImageView) itemView.findViewById(R.id.iv_user);
             mTvPullDate = (TextView) itemView.findViewById(R.id.tv_pull_date);
         }

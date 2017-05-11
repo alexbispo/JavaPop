@@ -1,7 +1,6 @@
 package com.artes.alexbispo.githubjavapop;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,17 +21,17 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     private Set<Repository> mDataset;
 
     public class RepositoryViewHolder extends RecyclerView.ViewHolder {
-        public TextView mRepositoryName, mRepositoryDescription, mRepositoryUserName, mRepositoryForks, mRepositoryStars;
-        public ImageView mRepositoryOwner;
+        public TextView mTvRepoName, mTvRepoDescription, mTvRepoOwnerName, mTvRepoForks, mTvRepoStars;
+        public ImageView mIvRepoOwner;
 
         public RepositoryViewHolder(View itemView) {
             super(itemView);
-            mRepositoryName = (TextView) itemView.findViewById(R.id.tv_repository_name);
-            mRepositoryDescription = (TextView) itemView.findViewById(R.id.tv_repository_description);
-            mRepositoryUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
-            mRepositoryForks = (TextView) itemView.findViewById(R.id.tv_forks);
-            mRepositoryStars = (TextView) itemView.findViewById(R.id.tv_stars);
-            mRepositoryOwner = (ImageView) itemView.findViewById(R.id.iv_owner);
+            mTvRepoName = (TextView) itemView.findViewById(R.id.tv_repo_name);
+            mTvRepoDescription = (TextView) itemView.findViewById(R.id.tv_repo_description);
+            mTvRepoOwnerName = (TextView) itemView.findViewById(R.id.tv_repo_owner_name);
+            mTvRepoForks = (TextView) itemView.findViewById(R.id.tv_repo_forks);
+            mTvRepoStars = (TextView) itemView.findViewById(R.id.tv_repo_stars);
+            mIvRepoOwner = (ImageView) itemView.findViewById(R.id.iv_repo_owner);
         }
     }
 
@@ -53,26 +51,26 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
         Repository repository = (Repository) mDataset.toArray()[position];
 
         if(repository != null){
-            holder.mRepositoryName.setText(repository.getName());
+            holder.mTvRepoName.setText(repository.getName());
             // TODO carregar em uma async task
-            Picasso.with(holder.mRepositoryOwner.getContext())
+            Picasso.with(holder.mIvRepoOwner.getContext())
                     .load(repository.getOwner().getAvatarUrl())
                     .resize(32, 32)
-                    .into(holder.mRepositoryOwner);
+                    .into(holder.mIvRepoOwner);
 
             StringBuilder sb = new StringBuilder();
             if(repository.getDescription().length() > 70){
                 sb.append(repository.getDescription().substring(0, 70));
+                sb.append("...");
             } else {
                 sb.append(repository.getDescription());
             }
-            sb.append("...");
 
-            holder.mRepositoryDescription.setText(sb.toString());
+            holder.mTvRepoDescription.setText(sb.toString());
 
-            holder.mRepositoryUserName.setText(repository.getOwner().getLogin());
-            holder.mRepositoryForks.setText(String.valueOf(repository.getForks()));
-            holder.mRepositoryStars.setText(String.valueOf(repository.getStars()));
+            holder.mTvRepoOwnerName.setText(repository.getOwner().getLogin());
+            holder.mTvRepoForks.setText(String.valueOf(repository.getForks()));
+            holder.mTvRepoStars.setText(String.valueOf(repository.getStars()));
         }
     }
 
