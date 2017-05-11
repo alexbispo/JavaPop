@@ -1,12 +1,14 @@
 package com.artes.alexbispo.githubjavapop;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +21,8 @@ import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static android.app.PendingIntent.getActivity;
 
 public class PullActivity extends AppCompatActivity implements LoadPullsTask.Listener {
 
@@ -33,10 +37,13 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pull);
+        setupActionBar();
 
         Intent intent = getIntent();
         ownerName = intent.getStringExtra("owner_name");
         repoName = intent.getStringExtra("repo_name");
+
+        setTitle(repoName);
 
 //        Toast.makeText(this, "owner:"+ownerName+"; repo:"+repoName, Toast.LENGTH_LONG).show();
 
@@ -60,6 +67,25 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
     public void onLoadPullsTaskCompleted(Set<Pull> pullSet) {
         mPullSet.addAll(pullSet);
         mPullAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private RecyclerView.OnItemTouchListener getReCyclerViewOnItemTouchListener(){
@@ -98,9 +124,6 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
-
-
-
         };
     }
 }

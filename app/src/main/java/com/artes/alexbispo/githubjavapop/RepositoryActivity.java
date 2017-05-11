@@ -86,7 +86,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
     }
 
     private RecyclerView.OnItemTouchListener getReCyclerViewOnItemTouchListener(){
-        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+        final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;
@@ -108,7 +108,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
-                if(child != null){
+                if(child != null && gestureDetector.onTouchEvent(e)){
                     Object[] repositoryArray = mRepositorySet.toArray();
                     Repository repo = (Repository) repositoryArray[rv.getChildAdapterPosition(child)];
                     goToPullActivity(repo);
