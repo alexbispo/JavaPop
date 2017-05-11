@@ -11,6 +11,7 @@ import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.artes.alexbispo.githubjavapop.model.Pull;
@@ -32,6 +33,8 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
     private LinearLayoutManager mLayoutManager;
     private String ownerName;
     private String repoName;
+    private int openedCount;
+    private int closedCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,16 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
     @Override
     public void onLoadPullsTaskCompleted(Set<Pull> pullSet) {
         mPullSet.addAll(pullSet);
+        openedCount = 0;
+        closedCount = 0;
+        for (Pull pull : mPullSet) {
+            if("open".equalsIgnoreCase(pull.getState())) openedCount++;
+            if("closed".equalsIgnoreCase(pull.getState())) closedCount++;
+        }
+        TextView tvPullOpened = (TextView) findViewById(R.id.tv_pull_opened);
+        TextView tvPullClosed = (TextView) findViewById(R.id.tv_pull_closed);
+        tvPullOpened.setText(String.format("%d opened", openedCount));
+        tvPullClosed.setText(String.format(" / %d closed", closedCount));
         mPullAdapter.notifyDataSetChanged();
     }
 

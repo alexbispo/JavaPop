@@ -24,18 +24,8 @@ public class LoadRepositoriesTask extends AsyncTask {
 
     private final Context mContext;
     private final int mPage;
-//    private final RepositoryAdapter mAdapter;
-//    private final Set<Repository> mDataSet;
     private Listener mListener;
     private ProgressDialog dialog;
-    public static final int START_PAGE = 1;
-
-//    public LoadRepositoriesTask(Context context, int page, RepositoryAdapter adapter, Set<Repository> dataSet) {
-//        mAdapter = adapter;
-//        mPage = page;
-//        mContext = context;
-//        mDataSet = dataSet;
-//    }
 
     public LoadRepositoriesTask(Context context, Listener listener, int page) {
         mContext = context;
@@ -45,7 +35,7 @@ public class LoadRepositoriesTask extends AsyncTask {
 
     @Override
     protected void onPreExecute() {
-        dialog = ProgressDialog.show(mContext, "Por favor aguarde", "Buscando repositórios...", true, true);
+        dialog = ProgressDialog.show(mContext, "Please wait", "Searching repositories...", true, true);
     }
 
     @Override
@@ -56,7 +46,6 @@ public class LoadRepositoriesTask extends AsyncTask {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-//            getAllRepositories(mRepositorySet);
         httpGetRepositories();
         return null;
     }
@@ -68,10 +57,8 @@ public class LoadRepositoriesTask extends AsyncTask {
             @Override
             public void onResponse(Call<GitHubResponse> call, Response<GitHubResponse> response) {
                 if(response.isSuccessful()){
-//                    setRepositories(response.body().getItems());
                     dialog.dismiss();
                     mListener.onLoadRepositoriesTaskCompleted(response.body().getItems());
-//                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -81,10 +68,6 @@ public class LoadRepositoriesTask extends AsyncTask {
             }
         });
     }
-
-//    private void setRepositories(Set<Repository> repositorySet) {
-//        mDataSet.addAll(repositorySet);
-//    }
 
     public interface Listener {
 

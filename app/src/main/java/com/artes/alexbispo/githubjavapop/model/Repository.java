@@ -16,6 +16,9 @@ public class Repository implements Comparable<Repository> {
     @SerializedName("name")
     private String name;
 
+    @SerializedName("full_name")
+    private String fullName;
+
     @SerializedName("description")
     private String description;
 
@@ -52,6 +55,14 @@ public class Repository implements Comparable<Repository> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFullName() {
+        return fullName != null ? fullName : "";
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getDescription() {

@@ -38,7 +38,7 @@ public class LoadPullsTask extends AsyncTask {
 
     @Override
     protected void onPreExecute() {
-        dialog = ProgressDialog.show(mContext, "Por favor aguarde", "Buscando pull requests...", true, true);
+        dialog = ProgressDialog.show(mContext, "Please wait", "Searching pull requests...", true, true);
     }
 
     @Override

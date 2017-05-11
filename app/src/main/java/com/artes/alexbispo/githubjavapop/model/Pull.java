@@ -26,6 +26,9 @@ public class Pull {
     @SerializedName("url")
     private String url;
 
+    @SerializedName("state")
+    private String state;
+
     public long getId() {
         return id;
     }
@@ -72,6 +75,14 @@ public class Pull {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
