@@ -1,11 +1,15 @@
 package com.artes.alexbispo.githubjavapop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
@@ -20,20 +24,22 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
     private boolean loadRepositoriesTaskCompleted;
     private int dataSetPage;
     private LinearLayoutManager mLayoutManager;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repository);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_repositories);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv_repositories);
 
         mRepositoryAdapter = new RepositoryAdapter(mRepositorySet);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mRepositoryAdapter);
-        recyclerView.addOnScrollListener(getOnScrollListener());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mRepositoryAdapter);
+        mRecyclerView.addOnScrollListener(getOnScrollListener());
+        mRecyclerView.addOnItemTouchListener(getReCyclerViewOnItemTouchListener());
     }
 
     @Override
@@ -77,5 +83,54 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
                 }
             }
         };
+    }
+
+    private RecyclerView.OnItemTouchListener getReCyclerViewOnItemTouchListener(){
+        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                View child = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                if(child != null){
+                    Object[] repositoryArray = mRepositorySet.toArray();
+                    Repository repo = (Repository) repositoryArray[mRecyclerView.getChildAdapterPosition(child)];
+                    goToPullActivity(repo);
+                }
+            }
+        });
+
+        return new RecyclerView.OnItemTouchListener(){
+
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if(child != null){
+                    Object[] repositoryArray = mRepositorySet.toArray();
+                    Repository repo = (Repository) repositoryArray[rv.getChildAdapterPosition(child)];
+                    goToPullActivity(repo);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+
+
+
+        };
+    }
+
+    private void goToPullActivity(Repository repo){
+        Intent goToPullActivityIntent = new Intent(RepositoryActivity.this, PullActivity.class);
+        goToPullActivityIntent.putExtra("owner_name", repo.getOwner().getLogin());
+        goToPullActivityIntent.putExtra("repo_name", repo.getName());
+        startActivity(goToPullActivityIntent);
     }
 }
