@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.artes.alexbispo.githubjavapop.model.Pull;
-import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.squareup.picasso.Picasso;
 
 import java.util.Set;
@@ -22,7 +21,7 @@ public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder
     private Set<Pull> mDataset;
 
     public class PullViewHolder extends RecyclerView.ViewHolder {
-        public TextView mPullUserName, mPullBody, mPullTitle;
+        public TextView mPullUserName, mPullBody, mPullTitle, mTvPullDate;
         public ImageView mPullUser;
 
         public PullViewHolder(View itemView) {
@@ -31,6 +30,7 @@ public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder
             mPullBody = (TextView) itemView.findViewById(R.id.tv_pull_body);
             mPullUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
             mPullUser = (ImageView) itemView.findViewById(R.id.iv_user);
+            mTvPullDate = (TextView) itemView.findViewById(R.id.tv_pull_date);
         }
     }
 
@@ -68,6 +68,7 @@ public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder
             holder.mPullBody.setText(sb.toString());
 
             holder.mPullUserName.setText(pull.getUser().getLogin());
+            holder.mTvPullDate.setText(pull.getCreatedAtFormatted("dd/MM/yyyy"));
         }
     }
 

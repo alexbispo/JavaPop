@@ -28,7 +28,7 @@ import static android.app.PendingIntent.getActivity;
 
 public class PullActivity extends AppCompatActivity implements LoadPullsTask.Listener {
 
-    private Set<Pull> mPullSet = new HashSet<>();
+    private Set<Pull> mPullSet = new TreeSet<>();
     private RecyclerView mRecyclerView;
     private PullAdapter mPullAdapter;
     private LinearLayoutManager mLayoutManager;

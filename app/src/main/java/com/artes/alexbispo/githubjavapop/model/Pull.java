@@ -1,12 +1,19 @@
 package com.artes.alexbispo.githubjavapop.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by alex on 11/05/17.
  */
 
-public class Pull {
+public class Pull implements Comparable<Pull> {
 
     @SerializedName("id")
     private long id;
@@ -85,6 +92,22 @@ public class Pull {
         this.state = state;
     }
 
+    public String getCreatedAtFormatted(String format) {
+        SimpleDateFormat dFormat = new SimpleDateFormat(format);
+        return dFormat.format(getCreatedAtInDate());
+    }
+
+    public Date getCreatedAtInDate(){
+        SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Date date = null;
+        try {
+            date = dFormat.parse(getCreatedAt());
+        } catch (ParseException e) {
+            return null;
+        }
+        return date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,11 +116,15 @@ public class Pull {
         Pull pull = (Pull) o;
 
         return id == pull.id;
-
     }
 
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public int compareTo(@NonNull Pull pull) {
+        return Long.valueOf(pull.getCreatedAtInDate().getTime()).compareTo(Long.valueOf(this.getCreatedAtInDate().getTime()));
     }
 }
