@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.artes.alexbispo.githubjavapop.model.Pull;
+import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.artes.alexbispo.githubjavapop.task.LoadPullsTask;
 
 import java.util.ArrayList;
@@ -38,14 +39,11 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
         setContentView(R.layout.activity_pull);
         setupActionBar();
 
-        Intent intent = getIntent();
-        ownerName = intent.getStringExtra("owner_name");
-        repoName = intent.getStringExtra("repo_name");
+        Repository repo = getIntent().getParcelableExtra("repo");
+        ownerName = repo.getOwner().getLogin();
+        repoName = repo.getName();
 
         setTitle(repoName);
-
-//        Toast.makeText(this, "owner:"+ownerName+"; repo:"+repoName, Toast.LENGTH_LONG).show();
-
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_pulls);
 
         mPullAdapter = new PullAdapter(mPullList);

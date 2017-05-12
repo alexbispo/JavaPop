@@ -16,7 +16,6 @@ import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class RepositoryActivity extends AppCompatActivity implements LoadRepositoriesTask.Listener {
 
@@ -124,8 +123,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
 
     private void goToPullActivity(Repository repo){
         Intent goToPullActivityIntent = new Intent(RepositoryActivity.this, PullActivity.class);
-        goToPullActivityIntent.putExtra("owner_name", repo.getOwner().getLogin());
-        goToPullActivityIntent.putExtra("repo_name", repo.getName());
+        goToPullActivityIntent.putExtra("repo", repo);
         startActivity(goToPullActivityIntent);
     }
 }
