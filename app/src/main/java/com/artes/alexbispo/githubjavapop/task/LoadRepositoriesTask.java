@@ -12,6 +12,7 @@ import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 import com.artes.alexbispo.githubjavapop.web.WebClient;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -76,7 +77,7 @@ public class LoadRepositoriesTask extends AsyncTask {
 
     public interface Listener {
 
-        void onLoadRepositoriesTaskCompleted(Set<Repository> repositorySet);
+        void onLoadRepositoriesTaskCompleted(List<Repository> repositoryList);
         void onLoadRepositoriesTaskFailed(String message);
     }
 }

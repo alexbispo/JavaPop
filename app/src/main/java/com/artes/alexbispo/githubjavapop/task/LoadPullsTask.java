@@ -7,11 +7,10 @@ import android.util.Log;
 
 import com.artes.alexbispo.githubjavapop.model.Pull;
 import com.artes.alexbispo.githubjavapop.web.GitHubInterface;
-import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 import com.artes.alexbispo.githubjavapop.web.WebClient;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,10 +49,10 @@ public class LoadPullsTask extends AsyncTask {
 
     private void httpGetPullRequests() {
         GitHubInterface ghInterface = WebClient.getClient().create(GitHubInterface.class);
-        Call<Set<Pull>> call = ghInterface.getPullRequests(mOwnerName, mRepoName);
-        call.enqueue(new Callback<Set<Pull>>() {
+        Call<List<Pull>> call = ghInterface.getPullRequests(mOwnerName, mRepoName);
+        call.enqueue(new Callback<List<Pull>>() {
             @Override
-            public void onResponse(Call<Set<Pull>> call, Response<Set<Pull>> response) {
+            public void onResponse(Call<List<Pull>> call, Response<List<Pull>> response) {
                 if(response.isSuccessful()){
                     dialog.dismiss();
                     mListener.onLoadPullsTaskCompleted(response.body());
@@ -63,7 +62,7 @@ public class LoadPullsTask extends AsyncTask {
             }
 
             @Override
-            public void onFailure(Call<Set<Pull>> call, Throwable t) {
+            public void onFailure(Call<List<Pull>> call, Throwable t) {
                 if(t instanceof IOException){
                     mListener.onLoadPullsTaskFailed("Failed on attempt to connect to the server, please check your internet connection.");
                 } else {
@@ -77,7 +76,7 @@ public class LoadPullsTask extends AsyncTask {
 
     public interface Listener {
 
-        void onLoadPullsTaskCompleted(Set<Pull> pullSet);
+        void onLoadPullsTaskCompleted(List<Pull> pullList);
         void onLoadPullsTaskFailed(String message);
     }
 }

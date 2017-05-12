@@ -2,10 +2,10 @@ package com.artes.alexbispo.githubjavapop;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,22 +14,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.artes.alexbispo.githubjavapop.model.Pull;
-import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.artes.alexbispo.githubjavapop.task.LoadPullsTask;
-import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
-import static android.app.PendingIntent.getActivity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PullActivity extends AppCompatActivity implements LoadPullsTask.Listener {
 
-    private Set<Pull> mPullSet = new TreeSet<>();
+    private List<Pull> mPullList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private PullAdapter mPullAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -54,7 +48,7 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_pulls);
 
-        mPullAdapter = new PullAdapter(mPullSet);
+        mPullAdapter = new PullAdapter(mPullList);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -69,11 +63,11 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
     }
 
     @Override
-    public void onLoadPullsTaskCompleted(Set<Pull> pullSet) {
-        mPullSet.addAll(pullSet);
+    public void onLoadPullsTaskCompleted(List<Pull> pullList) {
+        mPullList.addAll(pullList);
         openedCount = 0;
         closedCount = 0;
-        for (Pull pull : mPullSet) {
+        for (Pull pull : mPullList) {
             if("open".equalsIgnoreCase(pull.getState())) openedCount++;
             if("closed".equalsIgnoreCase(pull.getState())) closedCount++;
         }
@@ -120,7 +114,7 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
             public void onLongPress(MotionEvent e) {
                 View child = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
                 if(child != null){
-                    Object[] repositoryArray = mPullSet.toArray();
+                    Object[] repositoryArray = mPullList.toArray();
                     Pull pull = (Pull) repositoryArray[mRecyclerView.getChildAdapterPosition(child)];
                     Intent goToPullPage = new Intent(Intent.ACTION_VIEW);
                     goToPullPage.setData(Uri.parse(pull.getUrl()));
@@ -135,7 +129,7 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
                 if(child != null && gestureDetector.onTouchEvent(e)){
-                    Object[] repositoryArray = mPullSet.toArray();
+                    Object[] repositoryArray = mPullList.toArray();
                     Pull pull = (Pull) repositoryArray[rv.getChildAdapterPosition(child)];
                     Intent goToPullPage = new Intent(Intent.ACTION_VIEW);
                     goToPullPage.setData(Uri.parse(pull.getUrl()));

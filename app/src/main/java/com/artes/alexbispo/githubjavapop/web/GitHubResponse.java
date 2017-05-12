@@ -19,7 +19,7 @@ public class GitHubResponse {
     private boolean incompleteResults;
 
     @SerializedName("items")
-    private Set<Repository> items;
+    private List<Repository> items;
 
     public GitHubResponse() {}
 
@@ -39,11 +39,11 @@ public class GitHubResponse {
         this.incompleteResults = incompleteResults;
     }
 
-    public Set<Repository> getItems() {
+    public List<Repository> getItems() {
         return items;
     }
 
-    public void setItems(Set<Repository> items) {
+    public void setItems(List<Repository> items) {
         this.items = items;
     }
 }

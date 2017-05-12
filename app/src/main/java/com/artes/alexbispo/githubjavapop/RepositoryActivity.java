@@ -13,16 +13,14 @@ import android.view.View;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
-import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
-import retrofit2.Response;
 
 public class RepositoryActivity extends AppCompatActivity implements LoadRepositoriesTask.Listener {
 
-    private Set<Repository> mRepositorySet = new TreeSet<>();
+    private List<Repository> mRepositoryList = new ArrayList<>();
     private RepositoryAdapter mRepositoryAdapter;
     private boolean mLoadRepositoriesTaskCompleted;
     private int mDataSetPage;
@@ -36,7 +34,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_repositories);
 
-        mRepositoryAdapter = new RepositoryAdapter(mRepositorySet);
+        mRepositoryAdapter = new RepositoryAdapter(mRepositoryList);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -53,8 +51,8 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
     }
 
     @Override
-    public void onLoadRepositoriesTaskCompleted(Set<Repository> repositorySet) {
-        mRepositorySet.addAll(repositorySet);
+    public void onLoadRepositoriesTaskCompleted(List<Repository> repositoryList) {
+        mRepositoryList.addAll(repositoryList);
         mRepositoryAdapter.notifyDataSetChanged();
         mLoadRepositoriesTaskCompleted = true;
     }
@@ -96,7 +94,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
             public void onLongPress(MotionEvent e) {
                 View child = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
                 if(child != null){
-                    Object[] repositoryArray = mRepositorySet.toArray();
+                    Object[] repositoryArray = mRepositoryList.toArray();
                     Repository repo = (Repository) repositoryArray[mRecyclerView.getChildAdapterPosition(child)];
                     goToPullActivity(repo);
                 }
@@ -109,7 +107,7 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
                 if(child != null && gestureDetector.onTouchEvent(e)){
-                    Object[] repositoryArray = mRepositorySet.toArray();
+                    Object[] repositoryArray = mRepositoryList.toArray();
                     Repository repo = (Repository) repositoryArray[rv.getChildAdapterPosition(child)];
                     goToPullActivity(repo);
                 }

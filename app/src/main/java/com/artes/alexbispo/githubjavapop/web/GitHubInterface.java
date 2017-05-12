@@ -1,10 +1,8 @@
 package com.artes.alexbispo.githubjavapop.web;
 
 import com.artes.alexbispo.githubjavapop.model.Pull;
-import com.artes.alexbispo.githubjavapop.model.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -21,5 +19,5 @@ public interface GitHubInterface {
     Call<GitHubResponse> getJavaPopRepositories(@Query("page") int page);
 
     @GET("repos/{owner}/{repo}/pulls")
-    Call<Set<Pull>> getPullRequests(@Path("owner") String owner, @Path("repo") String repo);
+    Call<List<Pull>> getPullRequests(@Path("owner") String owner, @Path("repo") String repo);
 }

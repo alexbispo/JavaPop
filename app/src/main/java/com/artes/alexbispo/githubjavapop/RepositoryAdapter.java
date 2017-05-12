@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.squareup.picasso.Picasso;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by alex on 10/05/17.
@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.RepositoryViewHolder> {
 
-    private Set<Repository> mDataset;
+    private List<Repository> mDataset;
 
     public class RepositoryViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvRepoName, mTvRepoDescription, mTvRepoOwnerName, mTvRepoForks, mTvRepoStars;
@@ -35,7 +35,7 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
         }
     }
 
-    public RepositoryAdapter(Set<Repository> dataSet) {
+    public RepositoryAdapter(List<Repository> dataSet) {
         this.mDataset = dataSet;
     }
 

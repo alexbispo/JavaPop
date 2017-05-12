@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.artes.alexbispo.githubjavapop.model.Pull;
 import com.squareup.picasso.Picasso;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by alex on 10/05/17.
@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder> {
 
-    private Set<Pull> mDataset;
+    private List<Pull> mDataset;
 
     public class PullViewHolder extends RecyclerView.ViewHolder {
         public TextView mPullUserName, mPullBody, mPullTitle, mTvPullDate;
@@ -34,7 +34,7 @@ public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder
         }
     }
 
-    public PullAdapter(Set<Pull> dataSet) {
+    public PullAdapter(List<Pull> dataSet) {
         this.mDataset = dataSet;
     }
 

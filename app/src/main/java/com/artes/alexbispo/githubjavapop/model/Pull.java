@@ -1,10 +1,7 @@
 package com.artes.alexbispo.githubjavapop.model;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +10,7 @@ import java.util.Date;
  * Created by alex on 11/05/17.
  */
 
-public class Pull implements Comparable<Pull> {
+public class Pull {
 
     @SerializedName("id")
     private long id;
@@ -121,10 +118,5 @@ public class Pull implements Comparable<Pull> {
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
-    }
-
-    @Override
-    public int compareTo(@NonNull Pull pull) {
-        return Long.valueOf(pull.getCreatedAtInDate().getTime()).compareTo(Long.valueOf(this.getCreatedAtInDate().getTime()));
     }
 }

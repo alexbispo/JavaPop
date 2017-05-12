@@ -1,14 +1,12 @@
 package com.artes.alexbispo.githubjavapop.model;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by alex on 09/05/17.
  */
 
-public class Repository implements Comparable<Repository> {
+public class Repository {
 
     @SerializedName("id")
     private long id;
@@ -121,8 +119,4 @@ public class Repository implements Comparable<Repository> {
         return (int) (id ^ (id >>> 32));
     }
 
-    @Override
-    public int compareTo(@NonNull Repository repository) {
-        return Integer.valueOf(repository.stars).compareTo(Integer.valueOf(this.stars));
-    }
 }
