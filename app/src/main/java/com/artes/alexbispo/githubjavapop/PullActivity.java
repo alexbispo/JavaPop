@@ -62,6 +62,7 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
 
     @Override
     public void onLoadPullsTaskCompleted(List<Pull> pullList) {
+        mPullList.clear();
         mPullList.addAll(pullList);
         openedCount = 0;
         closedCount = 0;
