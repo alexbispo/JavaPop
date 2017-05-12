@@ -10,6 +10,7 @@ import com.artes.alexbispo.githubjavapop.web.GitHubInterface;
 import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 import com.artes.alexbispo.githubjavapop.web.WebClient;
 
+import java.io.IOException;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -38,12 +39,11 @@ public class LoadPullsTask extends AsyncTask {
 
     @Override
     protected void onPreExecute() {
-        dialog = ProgressDialog.show(mContext, "Please wait", "Searching pull requests...", true, true);
+        dialog = ProgressDialog.show(mContext, "Please wait", "Searching pull requests...", true, false);
     }
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        // TODO Tratar timeout da requisição, por falta de internet por exemplo.
         httpGetPullRequests();
         return null;
     }
@@ -57,11 +57,19 @@ public class LoadPullsTask extends AsyncTask {
                 if(response.isSuccessful()){
                     dialog.dismiss();
                     mListener.onLoadPullsTaskCompleted(response.body());
+                } else {
+                    mListener.onLoadPullsTaskFailed("It wasn't possible to search the pull requests, please try again late.");
                 }
             }
 
             @Override
             public void onFailure(Call<Set<Pull>> call, Throwable t) {
+                if(t instanceof IOException){
+                    mListener.onLoadPullsTaskFailed("Failed on attempt to connect to the server, please check your internet connection.");
+                } else {
+                    mListener.onLoadPullsTaskFailed("So sorry, there is anything wrong! try again late.");
+                }
+                dialog.dismiss();
                 Log.e("HTTP", "", t);
             }
         });
@@ -70,6 +78,7 @@ public class LoadPullsTask extends AsyncTask {
     public interface Listener {
 
         void onLoadPullsTaskCompleted(Set<Pull> pullSet);
+        void onLoadPullsTaskFailed(String message);
     }
 }
 

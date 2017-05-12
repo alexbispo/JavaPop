@@ -2,6 +2,7 @@ package com.artes.alexbispo.githubjavapop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,9 +13,12 @@ import android.view.View;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
 import com.artes.alexbispo.githubjavapop.task.LoadRepositoriesTask;
+import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 
 import java.util.Set;
 import java.util.TreeSet;
+
+import retrofit2.Response;
 
 public class RepositoryActivity extends AppCompatActivity implements LoadRepositoriesTask.Listener {
 
@@ -53,6 +57,11 @@ public class RepositoryActivity extends AppCompatActivity implements LoadReposit
         mRepositorySet.addAll(repositorySet);
         mRepositoryAdapter.notifyDataSetChanged();
         mLoadRepositoriesTaskCompleted = true;
+    }
+
+    @Override
+    public void onLoadRepositoriesTaskFailed(String message) {
+        Snackbar.make(findViewById(R.id.rv_repositories), message, Snackbar.LENGTH_LONG).show();
     }
 
     private RecyclerView.OnScrollListener getOnScrollListener() {

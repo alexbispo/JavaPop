@@ -52,22 +52,13 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
 
         if(repository != null){
             holder.mTvRepoName.setText(repository.getName());
-            // TODO carregar em uma async task
+
             Picasso.with(holder.mIvRepoOwner.getContext())
                     .load(repository.getOwner().getAvatarUrl())
                     .resize(32, 32)
                     .into(holder.mIvRepoOwner);
 
-            StringBuilder sb = new StringBuilder();
-            if(repository.getDescription().length() > 70){
-                sb.append(repository.getDescription().substring(0, 70));
-                sb.append("...");
-            } else {
-                sb.append(repository.getDescription());
-            }
-
-            holder.mTvRepoDescription.setText(sb.toString());
-
+            holder.mTvRepoDescription.setText(repository.getDescription());
             holder.mTvRepoOwnerName.setText(repository.getOwner().getLogin());
             holder.mTvRepoForks.setText(String.valueOf(repository.getForks()));
             holder.mTvRepoStars.setText(String.valueOf(repository.getStars()));

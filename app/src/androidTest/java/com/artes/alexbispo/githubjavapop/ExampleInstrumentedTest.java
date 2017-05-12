@@ -18,6 +18,8 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() throws Exception {
+        // TODO Escrever alguns casos de testes para os casos de uso
+
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 

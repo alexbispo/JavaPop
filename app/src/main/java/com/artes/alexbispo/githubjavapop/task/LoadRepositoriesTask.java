@@ -3,6 +3,7 @@ package com.artes.alexbispo.githubjavapop.task;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.artes.alexbispo.githubjavapop.model.Repository;
@@ -10,6 +11,7 @@ import com.artes.alexbispo.githubjavapop.web.GitHubInterface;
 import com.artes.alexbispo.githubjavapop.web.GitHubResponse;
 import com.artes.alexbispo.githubjavapop.web.WebClient;
 
+import java.io.IOException;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -35,17 +37,11 @@ public class LoadRepositoriesTask extends AsyncTask {
 
     @Override
     protected void onPreExecute() {
-        dialog = ProgressDialog.show(mContext, "Please wait", "Searching repositories...", true, true);
+        dialog = ProgressDialog.show(mContext, "Please wait", "Searching repositories...", true, false);
     }
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        // TODO Tratar timeout da requisição, por falta de internet por exemplo.
-//            try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         httpGetRepositories();
         return null;
     }
@@ -59,11 +55,20 @@ public class LoadRepositoriesTask extends AsyncTask {
                 if(response.isSuccessful()){
                     dialog.dismiss();
                     mListener.onLoadRepositoriesTaskCompleted(response.body().getItems());
+                } else {
+                    dialog.dismiss();
+                    mListener.onLoadRepositoriesTaskFailed("It wasn't possible to search the repositories, please try again late.");
                 }
             }
 
             @Override
             public void onFailure(Call<GitHubResponse> call, Throwable t) {
+                if(t instanceof IOException){
+                    mListener.onLoadRepositoriesTaskFailed("Failed on attempt to connect to the server, please check your internet connection.");
+                } else {
+                    mListener.onLoadRepositoriesTaskFailed("So sorry, there is anything wrong! try again late.");
+                }
+                dialog.dismiss();
                 Log.e("HTTP", "", t);
             }
         });
@@ -72,6 +77,7 @@ public class LoadRepositoriesTask extends AsyncTask {
     public interface Listener {
 
         void onLoadRepositoriesTaskCompleted(Set<Repository> repositorySet);
+        void onLoadRepositoriesTaskFailed(String message);
     }
 }
 

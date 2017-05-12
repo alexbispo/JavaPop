@@ -2,6 +2,7 @@ package com.artes.alexbispo.githubjavapop;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -81,6 +82,12 @@ public class PullActivity extends AppCompatActivity implements LoadPullsTask.Lis
         tvPullOpened.setText(String.format("%d opened", openedCount));
         tvPullClosed.setText(String.format(" / %d closed", closedCount));
         mPullAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoadPullsTaskFailed(String message) {
+        Snackbar.make(findViewById(R.id.rv_pulls), message, Snackbar.LENGTH_LONG).show();
+
     }
 
     @Override

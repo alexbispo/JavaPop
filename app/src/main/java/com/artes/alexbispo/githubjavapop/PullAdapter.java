@@ -51,22 +51,13 @@ public class PullAdapter extends RecyclerView.Adapter<PullAdapter.PullViewHolder
 
         if(pull != null){
             holder.mPullTitle.setText(pull.getTitle());
-            // TODO carregar em uma async task
+
             Picasso.with(holder.mPullUser.getContext())
                     .load(pull.getUser().getAvatarUrl())
                     .resize(32, 32)
                     .into(holder.mPullUser);
 
-            StringBuilder sb = new StringBuilder();
-            if(pull.getBody().length() > 70){
-                sb.append(pull.getBody().substring(0, 70));
-            } else {
-                sb.append(pull.getBody());
-            }
-            sb.append("...");
-
-            holder.mPullBody.setText(sb.toString());
-
+            holder.mPullBody.setText(pull.getBody());
             holder.mPullUserName.setText(pull.getUser().getLogin());
             holder.mTvPullDate.setText(pull.getCreatedAtFormatted("dd/MM/yyyy"));
         }
